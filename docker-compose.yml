@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:latest
+    container_name: chatapp-db
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: dvld12345
+      MYSQL_DATABASE: chat-app # main database name
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:  # Define the named volume
