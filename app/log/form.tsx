@@ -1,17 +1,24 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik';
-import { LogInSchema, SignUpSchema } from '../models/schemas/logForm';
+import { LoginFormValues, LogInSchema, SignUpFormValues, SignUpSchema } from '../models/schemas/logForm.validation';
 import GoogleSignInBtn from './token-providers/googlePlus';
 import GitHubSignInButton from './token-providers/githubSignInButton';
 import FacebookSignInButton from './token-providers/facebookSignInButton';
 import styles from './page.module.css';
 import { FaUser } from 'react-icons/fa';
-import logService from '../api/log';
+import axios from 'axios';
+import cookies from 'js-cookie'
 
-export default function LogPage() {
-  const [isLogForm, setIsLogForm] = useState(true);
+
+export default function form() {
+  const [isLogForm, setIsLogForm] = useState(false);
   const [windowWidth, setWindowWidth] = useState(false);
+
+  async function logFetcher(route: string, values: LoginFormValues | SignUpFormValues): Promise<any>{
+   const {data} = await axios.post(route, values)
+   return data
+  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -22,16 +29,20 @@ export default function LogPage() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  async function submitHandler(values: any, formikHelpers: FormikHelpers<any>) {
+  async function submitHandler(values: any) {
     try{
-      const logResponse = isLogForm ? await logService.signInUser(values) : await logService.signUpUser(values)
+      const logResponse = isLogForm ? 
+      await logFetcher(`${process.env.NEXT_PUBLIC_API_BASE}/api/user/in`, values) 
+      : 
+      await logFetcher(`${process.env.NEXT_PUBLIC_API_BASE}/api/user/up`, values)
       if(logResponse.access_token){
-        sessionStorage.setItem('access_token', logResponse.access_token)
+        cookies.set('access_token', logResponse.access_token)
       }else{
         throw new Error()
       }
-    }catch{
-      throw new Error()
+    }catch(error){
+        console.log(error)
+      return error
     }
   }
 

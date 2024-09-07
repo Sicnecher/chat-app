@@ -1,6 +1,5 @@
 import { GoogleOAuthProvider, GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 import { FcGoogle } from 'react-icons/fc';
-import envConfig from '@/app/env.config';
 import styles from '../page.module.css'
 import { useEffect, useState } from 'react';
 
@@ -15,7 +14,7 @@ export default function GoogleSignInBtn({isSmall}: {isSmall: boolean}) {
     })
 
     return (
-        <GoogleOAuthProvider clientId={envConfig.googleClientId}>
+        <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID as string}>
             <button
             onClick={() => login()}
             className={styles.tokenButton}>

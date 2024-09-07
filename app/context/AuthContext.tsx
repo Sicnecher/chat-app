@@ -1,51 +1,51 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+// import React, { createContext, useContext, useState, useEffect } from 'react';
+// import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
 
-interface AuthContextType {
-  isAuthenticated: boolean;
-  loading: boolean;
-  login: () => void;
-  logout: () => void;
-}
+// interface AuthContextType {
+//   isAuthenticated: boolean;
+//   login: () => void;
+//   logout: () => void;
+// }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+// const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }){
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+// export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+//   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  useEffect(() => {
-    // Simulate a call to check authentication status (e.g., checking cookies, tokens, etc.)
-    const checkAuth = async () => {
-      // Example: Fetch user status from an API or local storage
-      const user = localStorage.getItem('user');
-      setIsAuthenticated(!!user);
-      setLoading(false);
-    };
-    checkAuth();
-  }, []);
+//   const { signIn } = useGoogleLogin({
+//     onSuccess: () => setIsAuthenticated(true),
+//     onFailure: () => setIsAuthenticated(false),
+//   });
 
-  const login = () => {
-    // Example: Set user to local storage
-    localStorage.setItem('user', 'true');
-    setIsAuthenticated(true);
-  };
+//   useEffect(() => {
+//     // Add logic to check if the user is already authenticated
+//     // For example, check if a token is present in localStorage
+//     const token = localStorage.getItem('access_token'); // Adjust based on your auth logic
+//     if (token) {
+//       setIsAuthenticated(true);
+//     }
+//   }, []);
 
-  const logout = () => {
-    localStorage.removeItem('user');
-    setIsAuthenticated(false);
-  };
+//   const login = () => {
+//     signIn();
+//   };
 
-  return (
-    <AuthContext.Provider value={{ isAuthenticated, loading, login, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
-};
+//   const logout = () => {
+//     setIsAuthenticated(false);
+//     localStorage.removeItem('token'); // Adjust based on your auth logic
+//   };
 
-export const useAuth = () => {
-  const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
-  }
-  return context;
-};
+//   return (
+//     <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
+// export const useAuth = () => {
+//   const context = useContext(AuthContext);
+//   if (context === undefined) {
+//     throw new Error('useAuth must be used within an AuthProvider');
+//   }
+//   return context;
+// };

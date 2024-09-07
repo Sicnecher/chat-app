@@ -1,12 +1,11 @@
-export interface LoginFormValues {
+
+  export interface LoginFormValuesDto {
     username: string;
     password: string;
   };
   
-export interface SignUpFormValues {
+export interface SignUpFormValuesDto {
     username: string;
-    age: string;
     email: string;
     password: string;
-    confirm_password: string;
   };

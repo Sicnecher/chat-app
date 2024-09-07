@@ -11,3 +11,15 @@ export const SignUpSchema = Yup.object().shape({
   password: Yup.string().min(6, 'Password must be at least 6 characters').required('Password is required'),
   confirm_password: Yup.string().oneOf([Yup.ref('password')], 'Must be the same as password').required('hey this is required too!')
 });
+
+export interface LoginFormValues {
+  username: string;
+  password: string;
+};
+
+export interface SignUpFormValues {
+  username: string;
+  email: string;
+  password: string;
+  confirm_password: string;
+};

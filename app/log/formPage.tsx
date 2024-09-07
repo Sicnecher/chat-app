@@ -1,7 +1,7 @@
-// import LogPage from "./form"
+import Form from "./form"
 import styles from "./page.module.css"
 
-export default function page(){
+export default function  formPage(){
     return (
         <>
         <div className={styles.sideColumn}>
@@ -19,7 +19,7 @@ export default function page(){
                 <h3>sfdsdf sfdsdfdgh fdfhj gyhkghjfgh hgfhjkh</h3>
             </section>
         </div>
-        {/* <LogPage /> */}
+        <Form />
         </>
     )
 }

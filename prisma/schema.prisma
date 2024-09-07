@@ -9,6 +9,36 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mysql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @db.VarChar(255) @unique
+  username  String   @db.VarChar(255) @unique
+  password  String   @db.VarChar(255)
+  chats     Chat[]   @relation("UserChats")
+
+  @@map("user")
+}
+
+model Chat {
+  id        Int      @id @default(autoincrement())
+  users    User[]    @relation("UserChats")
+  messages  Message[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("chat")
+}
+
+model Message {
+  id       Int      @id @default(autoincrement())
+  chat     Chat     @relation(fields: [chatId], references: [id])
+  chatId   Int
+  message  String
+  time     DateTime
+
+  @@map("message")
 }
