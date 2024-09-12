@@ -1,24 +1,19 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik';
-import { LoginFormValues, LogInSchema, SignUpFormValues, SignUpSchema } from '../models/schemas/logForm.validation';
-import GoogleSignInBtn from './token-providers/googlePlus';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { LogInSchema, SignUpSchema } from '../models/schemas/logForm.validation';
+import GoogleSignInBtn from './token-providers/googleSignInButton';
 import GitHubSignInButton from './token-providers/githubSignInButton';
-import FacebookSignInButton from './token-providers/facebookSignInButton';
+import GitLabSignInBtn from './token-providers/gitLabSignInButton';
 import styles from './page.module.css';
 import { FaUser } from 'react-icons/fa';
 import axios from 'axios';
-import cookies from 'js-cookie'
+import Cookies from 'js-cookie'
 
 
 export default function form() {
   const [isLogForm, setIsLogForm] = useState(false);
   const [windowWidth, setWindowWidth] = useState(false);
-
-  async function logFetcher(route: string, values: LoginFormValues | SignUpFormValues): Promise<any>{
-   const {data} = await axios.post(route, values)
-   return data
-  }
 
   useEffect(() => {
     const handleResize = () => {
@@ -30,18 +25,20 @@ export default function form() {
   }, []);
 
   async function submitHandler(values: any) {
+    async function logResponse(){
+      const {data} = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE as string}/api/user/${isLogForm ? 'in' : 'up'}`, values)
+      return data
+    }
     try{
-      const logResponse = isLogForm ? 
-      await logFetcher(`${process.env.NEXT_PUBLIC_API_BASE}/api/user/in`, values) 
-      : 
-      await logFetcher(`${process.env.NEXT_PUBLIC_API_BASE}/api/user/up`, values)
-      if(logResponse.access_token){
-        cookies.set('access_token', logResponse.access_token)
-      }else{
-        throw new Error()
-      }
+      logResponse().then((response) => {
+        Cookies.set('access_token', response.token)
+      }).catch((error) => {
+        throw new Error(error)
+      }).finally(() => {
+        window.location.reload()
+      })
     }catch(error){
-        console.log(error)
+      console.log(error)
       return error
     }
   }
@@ -52,7 +49,7 @@ export default function form() {
         <label>Register with:</label>
         <section className={styles.cloudBtnContainer}>
           <GoogleSignInBtn isSmall={windowWidth} />
-          <FacebookSignInButton isSmall={windowWidth} />
+          <GitLabSignInBtn isSmall={windowWidth} />
           <GitHubSignInButton isSmall={windowWidth} />
         </section>
       </div>

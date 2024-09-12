@@ -9,7 +9,7 @@ export async function POST(request: Request, res: Response){
         const formData: SignUpFormValuesDto = await request.json()
         const response = await userApiService.signUp(formData)
         return NextResponse.json({
-            access_token: response
+            token: response
         })
      }catch(err){
         console.log(err)

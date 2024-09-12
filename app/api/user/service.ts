@@ -29,6 +29,7 @@ class UserApiService{
     async signUp(user: SignUpFormValuesDto): Promise<string | Error | unknown> {
         try{
             const hashedPassword = await bcrypt.hash(user.password, 10);
+            console.log('after hash')
             const newUser = await prisma.user.create({
                 data: {
                     username: user.username,
@@ -36,8 +37,10 @@ class UserApiService{
                     password: hashedPassword,
                 }
             });
-            const response  = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE}/api/auth/jwt/generate`, newUser)
-            return response
+            console.log('after database')
+            const {data}  = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE}/api/auth/jwt/generate`, newUser)
+            console.log('after jwt generation', data)
+            return data.token
         }catch(error){
             return error
         }

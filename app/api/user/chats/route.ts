@@ -3,14 +3,24 @@ import { NextResponse } from "next/server";
 
 const prisma = new PrismaClient()
 
-export async function POST(request: Request){
-    const userWithChats = await prisma.user.findUnique({
-        where: { id: 2 },
-        include: {
-          chats: true
-        },
-      });
+export async function POST(req: Request){
+  try{
+
+  }catch(error){
+    
+  }
+  const request = await req.json()
+  const userId = request.id
+  const chats = await prisma.chat.findMany({
+    where: {
+      users: {
+        some: {
+          id: userId
+        }
+      }
+    }
+  });
     return NextResponse.json({
-        hello: "world"
+        chats: chats
     })
 }

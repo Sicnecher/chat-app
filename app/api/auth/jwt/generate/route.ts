@@ -10,8 +10,11 @@ export async function POST(req: NextRequest){
             id: user.id
     }
     const access_token = jwt.sign(payload, process.env.SECRET_JWT as string)
-    return access_token
+    return NextResponse.json({
+        token: access_token
+    })
     }catch(error){
-        return error
+        console.error(error)
+        throw new Error("Unrecognzied error!")
     }
 }

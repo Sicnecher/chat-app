@@ -1,6 +1,6 @@
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 import "bootstrap/dist/css/bootstrap.css"
-import styles from "./globals.module.css"
+import styles from "./main.module.css"
 import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "SicnecherChat",
@@ -14,9 +14,7 @@ export default function RootLayout({
 }>){
       return (
         <html className={styles.html} lang="en">
-          <GoogleOAuthProvider clientId={process.env.GOOGLE_CLIENT_ID as string}>
             <body>{children}</body>
-          </GoogleOAuthProvider>
         </html>
       );
     }

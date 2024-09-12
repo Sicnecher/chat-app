@@ -1,14 +1,14 @@
 // components/GitHubSignInButton.tsx
 import React from 'react';
-import { FaGithub } from 'react-icons/fa';
+import { FaGithub, FaGitlab } from 'react-icons/fa';
 import styles from '../page.module.css';
 import { account } from '@/appwrite';
 import { OAuthProvider } from 'appwrite';
 
-export default function GitHubSignInButton({isSmall}: {isSmall: boolean}) {
+export default function GitLabSignInButton({isSmall}: {isSmall: boolean}) {
   async function handleLogin(){
     account.createOAuth2Session(
-        'github' as OAuthProvider,
+        'gitlab' as OAuthProvider,
         'http://localhost:3000',
         'http://localhost:3000'
     )
@@ -16,8 +16,8 @@ export default function GitHubSignInButton({isSmall}: {isSmall: boolean}) {
 
   return (
     <button onClick={handleLogin} className={styles.tokenButton}>
-      <FaGithub className={styles.tokenIcon} />
-      {isSmall && (<p>GitHub</p>)}
+      <FaGitlab className={styles.tokenIcon} />
+      {isSmall && (<p>GitLab</p>)}
     </button>
   );
 };

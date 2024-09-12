@@ -12,6 +12,10 @@ export const SignUpSchema = Yup.object().shape({
   confirm_password: Yup.string().oneOf([Yup.ref('password')], 'Must be the same as password').required('hey this is required too!')
 });
 
+export const SearchUserSchema = Yup.object().shape({
+  userToSearch: Yup.string().required('Hey motherfucker you better write something here!')
+})
+
 export interface LoginFormValues {
   username: string;
   password: string;
