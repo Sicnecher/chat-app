@@ -4,11 +4,12 @@ import { account } from '@/appwrite';
 import { OAuthProvider } from 'appwrite';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { IconType } from 'react-icons/lib';
 
-export default function GoogleSignInBtn({isSmall}: {isSmall: boolean}) {
+export default function     TokenProviderBtn({isSmall, provider, Icon}: {isSmall: boolean, provider: string, Icon: IconType}) {
 async function handleLogin(){
     account.createOAuth2Session(
-        'google' as OAuthProvider,
+        provider as OAuthProvider,
         'http://localhost:3000',
         'http://localhost:3000'
     )
@@ -29,8 +30,8 @@ async function handleLogin(){
             <button
             onClick={() => handleLogin()}
             className={styles.tokenButton}>
-                <FcGoogle className={styles.tokenIcon} />
-                {isSmall && (<p>Google</p>)}
+                <Icon className={styles.tokenIcon} />
+                {isSmall && (<p>{provider}</p>)}
             </button>
     )
 }
