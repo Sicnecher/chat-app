@@ -4,11 +4,6 @@ import { NextResponse } from "next/server";
 const prisma = new PrismaClient()
 
 export async function POST(req: Request){
-  try{
-
-  }catch(error){
-    
-  }
   const request = await req.json()
   const userId = request.id
   const chats = await prisma.chat.findMany({
@@ -21,6 +16,6 @@ export async function POST(req: Request){
     }
   });
     return NextResponse.json({
-        chats: chats
+        chats: ['hey']
     })
-}
+  }

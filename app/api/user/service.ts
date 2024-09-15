@@ -28,6 +28,7 @@ class UserApiService{
 
     async signUp(user: SignUpFormValuesDto): Promise<string | Error | unknown> {
         try{
+            console.log(user)
             const hashedPassword = await bcrypt.hash(user.password, 10);
             console.log('after hash')
             const newUser = await prisma.user.create({

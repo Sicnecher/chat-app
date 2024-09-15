@@ -19,6 +19,7 @@ model User {
   username  String   @db.VarChar(255) @unique
   password  String   @db.VarChar(255)
   chats     Chat[]   @relation("UserChats")
+  messages  Message[]
 
   @@map("user")
 }
@@ -39,6 +40,8 @@ model Message {
   chat     Chat     @relation(fields: [chatId], references: [id])
   chatId   Int
   message  String
+  senderId Int
+  sender   User     @relation(fields: [senderId], references: [id])
   time     DateTime
 
   @@map("message")

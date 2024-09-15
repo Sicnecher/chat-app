@@ -2,13 +2,12 @@
 import { useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { LogInSchema, SignUpSchema } from '../models/schemas/logForm.validation';
-import GoogleSignInBtn from './token-providers/googleSignInButton';
-import GitHubSignInButton from './token-providers/githubSignInButton';
-import GitLabSignInBtn from './token-providers/gitLabSignInButton';
 import styles from './page.module.css';
-import { FaUser } from 'react-icons/fa';
+import { FaGithub, FaGitlab, FaUser } from 'react-icons/fa';
 import axios from 'axios';
 import Cookies from 'js-cookie'
+import { FcGoogle } from 'react-icons/fc';
+import TokenProviderBtn from './token-provider';
 
 
 export default function form() {
@@ -48,9 +47,9 @@ export default function form() {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
         <label>Register with:</label>
         <section className={styles.cloudBtnContainer}>
-          <GoogleSignInBtn isSmall={windowWidth} />
-          <GitLabSignInBtn isSmall={windowWidth} />
-          <GitHubSignInButton isSmall={windowWidth} />
+          <TokenProviderBtn isSmall={windowWidth} provider="google" Icon={FcGoogle} />
+          <TokenProviderBtn isSmall={windowWidth} provider="gitlab" Icon={FaGitlab} />
+          <TokenProviderBtn isSmall={windowWidth} provider="github" Icon={FaGithub} />
         </section>
       </div>
       <hr style={{ width: '80%' }} />

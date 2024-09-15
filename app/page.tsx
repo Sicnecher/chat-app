@@ -7,7 +7,6 @@ import Cookies from "js-cookie";
 import { JwtPayload } from "jsonwebtoken";
 import axios from "axios";
 import { account } from "@/appwrite";
-import { log } from "console";
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -23,16 +22,23 @@ export default function Home() {
   useEffect(() => {
     async function checkToken(){
       const accessToken = Cookies.get('access_token')
+      const appwriteSession = await account.getSession('current')
       if(accessToken){
-        console.log(process.env.NEXT_PUBLIC_API_BASE)
-        axios.post(`${process.env.NEXT_PUBLIC_API_BASE}/api/auth/jwt/validate`, {token: accessToken})
-        .then((response) => {
-          setUser(response)
-        }).catch(() => {
-          setUser(false)
-        }).finally(() => {
-          setIsLoading(false)
-        })
+        axios.post(`${process.env.NEXT_PUBLIC_API_BASE}/api/auth/jwt/validate`, {token: accessToken}).then((response) => {
+        setUser(response)
+      }).catch(() => {
+        setUser(false)
+      }).finally(() => {
+        setIsLoading(false)
+      })
+      }else if(appwriteSession){
+        account.get().then((response) => {
+            axios.post(`${process.env.NEXT_PUBLIC_API_BASE}/api/user`, response).then((res) => {
+            Cookies.set('access_token', res.data.token)
+                })
+              }).catch((error) => {
+                console.error('Error fetching user data:', error);
+              })
       }else{
         setUser(false)
         setIsLoading(false)
@@ -43,7 +49,7 @@ export default function Home() {
 
   return (
     <>
-    {isLoading? (<ClipLoader color="#3498db" loading={isLoading} size={150} />) : (!user ? (<FormPage />) : (<ChatPage props={{user: user, logout: handleLogout}} />))}
+    {isLoading? (<ClipLoader color="#3498db" loading={isLoading} size={150} />) : (!user ? (<><FormPage /><button onClick={handleLogout}>click</button></>) : (<ChatPage props={{user: user, logout: handleLogout}} />))}
     </>
   )
 }
