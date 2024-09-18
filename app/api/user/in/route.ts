@@ -15,7 +15,7 @@ export async function POST(request: Request){
             streamToken: data.token
         })
     }catch(error){
-        console.log(error)
+        console.log('here: ',error)
         return error
     }
 }

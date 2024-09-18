@@ -15,7 +15,7 @@ export default function AddChannel({user, deactivateComponent}: {user: any, deac
             axios.post(`${process.env.NEXT_PUBLIC_API_BASE}/api/user/chats/searchUser`,e.target.value ).then((response) => {
                 console.log(response)
             }).catch((error) => {
-                console.log(error)
+                console.log('here: ',error)
             })
         }
     }
@@ -23,7 +23,7 @@ export default function AddChannel({user, deactivateComponent}: {user: any, deac
         axios.post(`${process.env.NEXGT_PUBLIC_API_BASE}/api/user/chats/createChat`, creationData).then((response) => {
             console.log(response)
         }).catch((error) => {
-            console.log(error) 
+            console.log('here: ',error) 
         }).finally(() => {
 
         })

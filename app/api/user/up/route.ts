@@ -22,7 +22,7 @@ export async function POST(request: Request){
             streamToken: data.token
         })
      }catch(err){
-        console.log(err)
+        console.log('here: ',err)
         return err
     }
 }
