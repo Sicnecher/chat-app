@@ -8,6 +8,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie'
 import { FcGoogle } from 'react-icons/fc';
 import TokenProviderBtn from './token-provider';
+import { streamClient } from '@/stream.init';
 
 
 export default function form() {
@@ -29,8 +30,9 @@ export default function form() {
       return data
     }
     try{
-      logResponse().then((response) => {
-        Cookies.set('access_token', response.token)
+      logResponse().then(async ({accessToken, userData, streamToken}) => {
+        await streamClient.connectUser(userData, streamToken)
+        Cookies.set('access_token', accessToken)
       }).catch((error) => {
         throw new Error(error)
       }).finally(() => {

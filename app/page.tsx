@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import FormPage from "./log/formPage"
-import ChatPage from "./components/chat/chatPage";
+import ChannelPage from "./components/channel-log/channelPage";
 import ClipLoader from 'react-spinners/ClipLoader';
 import Cookies from "js-cookie";
 import { JwtPayload } from "jsonwebtoken";
@@ -49,7 +49,7 @@ export default function Home() {
 
   return (
     <>
-    {isLoading? (<ClipLoader color="#3498db" loading={isLoading} size={150} />) : (!user ? (<><FormPage /><button onClick={handleLogout}>click</button></>) : (<ChatPage props={{user: user, logout: handleLogout}} />))}
+    {isLoading? (<ClipLoader color="#3498db" loading={isLoading} size={150} />) : (!user ? (<FormPage />) : (<ChannelPage user={user} logout = {handleLogout} />))}
     </>
   )
 }

@@ -2,15 +2,17 @@ import { NextResponse } from "next/server";
 import {PrismaClient} from '@prisma/client'
 import { userApiService } from '../service'
 import { LoginFormValuesDto } from "@/app/models/dto/logForm";
-
-const prisma = new PrismaClient()
+import axios from "axios";
 
 export async function POST(request: Request){
     try{
         const formData: LoginFormValuesDto = await request.json()
-        const {data} = await userApiService.signIn(formData)
+        const {token, userId} = await userApiService.signIn(formData)
+        const {data} = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE}/api/auth/streamToken`, userId)
         return NextResponse.json({
-            token: data.token
+            userData: {id: userId, name: formData.username},
+            accessToken: token,
+            streamToken: data.token
         })
     }catch(error){
         console.log(error)

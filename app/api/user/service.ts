@@ -20,17 +20,15 @@ class UserApiService{
         if (!foundUser) throw new Error('Unauthorized access!');
         const validation = await bcrypt.compare(user.password, foundUser.password);
         if (validation){
-            const response  = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE}/api/auth/jwt/generate`, foundUser)
-            return response
+            const {data}  = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE}/api/auth/jwt/generate`, foundUser)
+            return { token: data.token, userId: foundUser.id }
         }
         throw new Error('Validation Failed');
     }
 
-    async signUp(user: SignUpFormValuesDto): Promise<string | Error | unknown> {
+    async signUp(user: SignUpFormValuesDto) {
         try{
-            console.log(user)
             const hashedPassword = await bcrypt.hash(user.password, 10);
-            console.log('after hash')
             const newUser = await prisma.user.create({
                 data: {
                     username: user.username,
@@ -38,12 +36,10 @@ class UserApiService{
                     password: hashedPassword,
                 }
             });
-            console.log('after database')
             const {data}  = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE}/api/auth/jwt/generate`, newUser)
-            console.log('after jwt generation', data)
-            return data.token
+            return { token: data.token, userId: newUser.id }
         }catch(error){
-            return error
+            throw new Error()
         }
     }
 }

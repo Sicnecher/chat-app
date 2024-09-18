@@ -18,31 +18,6 @@ model User {
   email     String   @db.VarChar(255) @unique
   username  String   @db.VarChar(255) @unique
   password  String   @db.VarChar(255)
-  chats     Chat[]   @relation("UserChats")
-  messages  Message[]
-
+  
   @@map("user")
-}
-
-model Chat {
-  id        Int      @id @default(autoincrement())
-  users    User[]    @relation("UserChats")
-  title    String
-  messages  Message[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("chat")
-}
-
-model Message {
-  id       Int      @id @default(autoincrement())
-  chat     Chat     @relation(fields: [chatId], references: [id])
-  chatId   Int
-  message  String
-  senderId Int
-  sender   User     @relation(fields: [senderId], references: [id])
-  time     DateTime
-
-  @@map("message")
 }
