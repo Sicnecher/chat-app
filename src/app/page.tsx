@@ -89,16 +89,12 @@ export default function Home() {
           const accessToken = Cookies.get('access_token')
           if(accessToken){
             await axios.post(`${process.env.NEXT_PUBLIC_PORT}/api/auth/jwt/validate`, {token: accessToken}).then(({data}) => {
-              // const userData = {
-              //   id: data.userData.id,
-              //   email: data.userData.email,
-              //   name: data.userData.username
-              // }
-              // streamClient.connectUser(userData, data.streamToken)
-              // const channel = streamClient.channel('messaging', 'channel', {
-              //   name: 'Talk about it'
-              // })
-              // setStreamUser(userData)
+              const userData = {
+                id: data.userData.id,
+                email: data.userData.email,
+                name: data.userData.username
+              }
+              streamClient.connectUser(userData, data.streamToken)
               setUser(data.userData)
             })
           }else{
@@ -122,5 +118,5 @@ export default function Home() {
     }
   }, [])
 
-  return isLoading? (<><ClipLoader color="#3498db" loading={isLoading} size={150} /></>) : (user ? <ChannelPage user={user} logout={handleLogout}  /> : <FormPage />)
+  return isLoading? (<><ClipLoader color="#3498db" loading={isLoading} size={150} /></>) : (user ? <ChannelPage user={user} streamUser={streamClient} logout={handleLogout} channelId={''} /> : <FormPage />)
 }

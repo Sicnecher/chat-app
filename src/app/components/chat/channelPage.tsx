@@ -27,9 +27,8 @@ export default function ChannelPage(
 		}
 		
 		async function activateChannel(){
-			console.log('id: ', channelId)
 			if(channelId){
-				const channel = streamClient.channel('messaging', {
+				const channel = streamClient.channel('messaging', channelId, {
 					name: channelId
 				});
 				await channel.watch();
