@@ -1,7 +1,7 @@
 import axios from "axios"
 import { ErrorMessage, Field, Form, Formik } from "formik"
 import { useState } from "react"
-import styles from '../components.module.css'
+import styles from '../../../global.module.css'
 
 export default function AddChannel({user, deactivateComponent}: {user: any, deactivateComponent: () => void}){
     const [resultedUsers, setResultedUsers] = useState<any>()

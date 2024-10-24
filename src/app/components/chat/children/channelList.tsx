@@ -2,7 +2,7 @@ import { SearchUserSchema } from "../../../models/schemas/logform.validation"
 import axios from "axios"
 import { ErrorMessage, Field, Form, Formik } from "formik"
 import { useState } from "react"
-import styles from "../../main.module.css"
+import styles from "../../../global.module.css"
 
 export default function ContactScroll({channelList, activateAddChannel}: {channelList: any[], activateAddChannel: () => void}){
     const [isSearchingUser, setIsSearchingUser] = useState<boolean>(false)
