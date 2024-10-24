@@ -1,4 +1,4 @@
-import styles from './page.module.css'
+import styles from '../../global.module.css'
 import { account } from '@/app/appwrite.service';
 import { OAuthProvider } from 'appwrite';
 import { IconType } from 'react-icons/lib';

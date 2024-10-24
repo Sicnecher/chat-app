@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import { LogInSchema, SignUpSchema } from '../../models/schemas/logform.validation';
-import styles from './page.module.css';
+import styles from '../../global.module.css'
 import { FaGithub, FaGitlab, FaUser } from 'react-icons/fa';
 import axios from 'axios';
 import Cookies from 'js-cookie'

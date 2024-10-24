@@ -1,5 +1,5 @@
 import Form from "./form"
-import styles from "./page.module.css"
+import styles from '../../global.module.css'
 
 export default function  formPage(){
     return (

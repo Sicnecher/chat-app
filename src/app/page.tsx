@@ -77,13 +77,11 @@ import { DefaultGenerics, StreamChat } from "stream-chat";
 export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [user, setUser] = useState<any | false>()
-  const [streamUser, setStreamUser] = useState<any>()
-  const [returnedComponent, setReturnedComponent] = useState<any>('')
 
-  async function handleLogout(){
-    Cookies.remove('access_token')
-    window.location.href = "/"
-  }
+  // async function handleLogout(){
+  //   Cookies.remove('access_token')
+  //   window.location.href = "/"
+  // }
 
   useEffect(() => {
     async function checkAccess(){
