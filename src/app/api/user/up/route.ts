@@ -1,7 +1,7 @@
 import {PrismaClient} from "@prisma/client";
 import { userApiService } from "../service";
-import { SignUpFormValuesDto } from "@/app/models/dto/logForm";
-import { streamClient } from "@/stream.init";
+import { SignUpFormValuesDto } from "@/app/models/dto/logform";
+import { streamClient } from "../../auth/stream.init";
 import { NextResponse } from "next/server";
 import axios from "axios";
 

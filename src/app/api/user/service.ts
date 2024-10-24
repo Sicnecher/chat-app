@@ -1,4 +1,4 @@
-import { SignUpFormValuesDto } from '@/app/models/dto/logForm';
+import { SignUpFormValuesDto } from '@/app/models/dto/logform';
 import { UserDto } from '@/app/models/dto/user';
 import {PrismaClient} from "@prisma/client"
 import axios from 'axios';
