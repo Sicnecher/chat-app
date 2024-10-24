@@ -63,8 +63,8 @@
 // }
 'use client'
 import { useEffect, useState } from "react";
-// import FormPage from "./components/log/formPage"
-// import ChannelPage from "./components/channel-log/channelPage";
+import FormPage from "./components/log/formPage"
+import ChannelPage from "./components/chat/channelPage";
 import ClipLoader from 'react-spinners/ClipLoader';
 import Cookies from "js-cookie";
 import axios from "axios";
@@ -124,6 +124,5 @@ export default function Home() {
     }
   }, [])
 
-  // return isLoading? (<><ClipLoader color="#3498db" loading={isLoading} size={150} /></>) : (user ? <ChannelPage user={user} /> : <FormPage />)
-  return 'hello'
+  return isLoading? (<><ClipLoader color="#3498db" loading={isLoading} size={150} /></>) : (user ? <ChannelPage user={user} /> : <FormPage />)
 }
