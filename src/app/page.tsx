@@ -78,10 +78,10 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [user, setUser] = useState<any | false>()
 
-  // async function handleLogout(){
-  //   Cookies.remove('access_token')
-  //   window.location.href = "/"
-  // }
+  async function handleLogout(){
+    Cookies.remove('access_token')
+    window.location.href = "/"
+  }
 
   useEffect(() => {
     async function checkAccess(){
@@ -122,5 +122,5 @@ export default function Home() {
     }
   }, [])
 
-  return isLoading? (<><ClipLoader color="#3498db" loading={isLoading} size={150} /></>) : (user ? <ChannelPage user={user} /> : <FormPage />)
+  return isLoading? (<><ClipLoader color="#3498db" loading={isLoading} size={150} /></>) : (user ? <ChannelPage user={user} logout={handleLogout}  /> : <FormPage />)
 }
