@@ -15,8 +15,7 @@ export async function POST(request: Request){
                 name: formData.username,
             }
         })
-        console.log('streamClient: ', streamClient)
-        const {data} = await axios.post(`${process.env.NEXT_PUBLIC_PORT}/api/auth/streamToken`, userId)
+        const {data} = await axios.post(`${process.env.NEXT_PUBLIC_PORT}/api/auth/streamToken`, {userId})
         return NextResponse.json({
             userData: {id: userId, name: formData.username, email: formData.email},
             accessToken: token,

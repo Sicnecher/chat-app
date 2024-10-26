@@ -13,7 +13,10 @@ class ApiAuthService{
                 id: payload.id
             }
         });
-        if (!foundUser) throw new Error('Unauthorized access!')
+        if (!foundUser){
+            console.log("user doesn't exist")
+            throw new Error('Unauthorized access!')
+        }
          return payload.email === foundUser.email ? payload : new Error('Unauthorized access!')
     }
 }

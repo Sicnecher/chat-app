@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
     try {
-        const body = await req.json();
-        const token = streamClient.createToken(body.id);
+        const body = await req.json() as {userId: string};
+        const token = streamClient.createToken(body.userId);
         // Returning a JSON response with the token
         return NextResponse.json({ token: token });
     } catch (error) {

@@ -1,17 +1,13 @@
 import { PrismaClient } from "@prisma/client";
 import axios from "axios";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 const prisma = new PrismaClient();
 
-export async function POST(request: Request) {
-    const data = await request.json();
+export async function POST(request: NextRequest) {
     try {
-        const foundUser = await prisma.user.findUnique({
-            where: {
-                email: data.email,
-            },
-        });
+        const data = await request.json()
+        const foundUser = await prisma.user.findUnique({ where: {email: data.email} });
         const response = await axios.post(`${process.env.NEXT_PUBLIC_PORT}/api/user/${foundUser ? ('in') : ('up')}`, {
             username: data.name,
             email: data.email,

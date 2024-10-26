@@ -30,6 +30,7 @@ class UserApiService{
         try{
             const hashedPassword = await hash(formData.password, 10);
             console.log('started hashing: ', hashedPassword)
+            console.log('form: ', formData)
             const newUser = await prisma.user.create({
                 data: {
                     username: formData.username,

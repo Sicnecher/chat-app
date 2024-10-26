@@ -16,12 +16,15 @@ export {account, client}
 export async function checkAppwriteSession(){
     try{
       const appwriteUser = await account.get()
-      console.log('appwrite user: ',appwriteUser)
       if(appwriteUser){
           await axios.post(`${process.env.NEXT_PUBLIC_PORT}/api/user/appwrite`, appwriteUser).then(async ({data}) => {
               Cookies.set('access_token', data.accessToken)
               streamClient.connectUser(data.userData, data.streamToken)
               account.deleteSession('current')
+              console.log('ddd')
+          }).catch((error) => {
+            console.log('ggg')
+            console.log(error)
           })
         }
       }catch(appwriteError){
