@@ -18,10 +18,8 @@ export async function POST(request: Request) {
             password: data.$id,
             isAppwrite: true
         })
-        console.log('this is the response:', response.data)
         return NextResponse.json(response.data, { status: 200 });
     }catch(error){
-        console.error('Error creating email session:', error);
         return NextResponse.json({ error: 'Failed to create email session' }, { status: 500 });
     }
 }

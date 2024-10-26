@@ -1,66 +1,3 @@
-// 'use client'
-// import { useEffect, useState } from "react";
-// import axios from 'axios'
-// import { StreamChat } from "stream-chat";
-// import { 
-//   Chat,
-//   Channel,
-//   MessageList,
-//   MessageInput,
-//   ChannelHeader,
-//   Thread,
-//   Window,
-//   LoadingIndicator
-//  } from "stream-chat-react";
-
-//  const apiKey = process.env.NEXT_PUBLIC_STREAM_TOKEN as string
-
-//  const user = {
-//   id: '1',
-//   name: 'jhon doe',
-//   image: 'https://getstream.imgix.net/images/random_svg/FS.png'
-//  }
-
-// export default function App() {
-//   const [client, setClient] = useState<any>()
-//   const [channel, setChannel] = useState<any>()
-
-//   useEffect(() => {
-//     async function init(){
-//       const chatClient = StreamChat.getInstance(apiKey)
-//       await axios.post('http://localhost:3000/api/auth', user).then( async (response) => {
-//         console.log(response.data)
-//         chatClient.connectUser(user, response.data.streamToken)
-//       })
-//       const channelInstance = chatClient.channel('messaging', 'general', {
-//         image: 'https://www.drupal.org/files/project-images/react.png',
-//         name: 'General',
-//         members: [user.id]
-//       })
-//       await channelInstance.watch()
-//       setChannel(channelInstance)
-//       setClient(chatClient)
-//     }
-//     init()
-
-//     if(client) return () => client.disconnectUser()
-//   }, [])
-
-//   if(!channel || !client) return <LoadingIndicator />
-
-//   return (
-//     <Chat client={client} theme="messaging light">
-//       <Channel channel={channel}>
-//         <Window>
-//           <ChannelHeader />
-//           <MessageList />
-//           <MessageInput />
-//         </Window>
-//         <Thread />
-//       </Channel>
-//     </Chat>
-//   )
-// }
 'use client'
 import { useEffect, useState } from "react";
 import FormPage from "./components/log/formPage"
@@ -68,20 +5,21 @@ import ChannelPage from "./components/chat/channelPage";
 import ClipLoader from 'react-spinners/ClipLoader';
 import Cookies from "js-cookie";
 import axios from "axios";
-import { checkAppwriteSession } from "./appwrite.service";
+import { account, checkAppwriteSession } from "./appwrite.service";
 import { streamClient } from "./stream.init"
-import { Thread, Channel, ChannelHeader, Chat, MessageInput, MessageList, Window } from "stream-chat-react";
-import { DefaultGenerics, StreamChat } from "stream-chat";
-// import ChannelPage from "./components/channel-log/channelPage";
+
+export function LogOutBtn(){
+  async function handleLogout(){
+    Cookies.remove('access_token')
+    account.deleteSession('current')
+    window.location.href = "/"
+  }
+  return <button onClick={handleLogout}>Quit</button>
+}
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [user, setUser] = useState<any | false>()
-
-  async function handleLogout(){
-    Cookies.remove('access_token')
-    window.location.href = "/"
-  }
 
   useEffect(() => {
     async function checkAccess(){
@@ -118,5 +56,5 @@ export default function Home() {
     }
   }, [])
 
-  return isLoading? (<><ClipLoader color="#3498db" loading={isLoading} size={150} /></>) : (user ? <ChannelPage user={user} streamUser={streamClient} logout={handleLogout} channelId={''} /> : <FormPage />)
+  return isLoading? (<><ClipLoader color="#3498db" loading={isLoading} size={150} /></>) : (user ? <ChannelPage user={user} streamUser={streamClient} channelId={''} /> : <FormPage />)
 }

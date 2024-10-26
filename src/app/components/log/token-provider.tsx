@@ -3,7 +3,7 @@ import { account } from '@/app/appwrite.service';
 import { OAuthProvider } from 'appwrite';
 import { IconType } from 'react-icons/lib';
 
-export default function TokenProviderBtn({isSmall, provider, Icon}: {isSmall: boolean, provider: string, Icon: IconType}) {
+export default function TokenProviderBtn({size, provider, Icon}: {size: boolean, provider: string, Icon: IconType}) {
 async function handleLogin(){
     account.createOAuth2Session(
         provider as OAuthProvider,
@@ -17,7 +17,7 @@ async function handleLogin(){
             onClick={() => handleLogin()}
             className={styles.tokenButton}>
                 <Icon className={styles.tokenIcon} />
-                {isSmall && (<p>{provider}</p>)}
+                {size && (<p>{provider}</p>)}
             </button>
     )
 }

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import {PrismaClient} from '@prisma/client'
 import { userApiService } from '../service'
-import { LoginFormValuesDto, SignUpFormValuesDto } from "@/app/models/dto/logForm";
+import { LoginFormValuesDto, SignUpFormValuesDto } from "@/app/models/dto/logform";
 import axios from "axios";
 
 export async function POST(request: Request){

@@ -41,7 +41,6 @@ export default function form() {
         window.location.reload()
       })
     }catch(error){
-      console.log(error)
       return error
     }
   }
@@ -51,9 +50,9 @@ export default function form() {
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
         <label>Register with:</label>
         <section className={styles.cloudBtnContainer}>
-          <TokenProviderBtn isSmall={windowWidth} provider="google" Icon={FcGoogle} />
-          <TokenProviderBtn isSmall={windowWidth} provider="gitlab" Icon={FaGitlab} />
-          <TokenProviderBtn isSmall={windowWidth} provider="github" Icon={FaGithub} />
+          <TokenProviderBtn size={windowWidth} provider="google" Icon={FcGoogle} />
+          <TokenProviderBtn size={windowWidth} provider="gitlab" Icon={FaGitlab} />
+          <TokenProviderBtn size={windowWidth} provider="github" Icon={FaGithub} />
         </section>
       </div>
       <hr style={{ width: '80%' }} />

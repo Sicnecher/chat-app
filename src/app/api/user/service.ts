@@ -2,7 +2,7 @@ import { SignUpFormValuesDto } from '@/app/models/dto/logform';
 import { UserDto } from '@/app/models/dto/user';
 import {PrismaClient} from "@prisma/client"
 import axios from 'axios';
-import bcrypt from 'bcryptjs';
+import { compare, hash } from 'bcryptjs';
 
 const prisma = new PrismaClient()
 
@@ -18,7 +18,7 @@ class UserApiService{
             }
         })
         if (!foundUser) throw new Error('Unauthorized access!');
-        const validation = data.isAppwrite ? true : await bcrypt.compare(data.password, foundUser.password);
+        const validation = data.isAppwrite ? true : await compare(data.password, foundUser.password);
         if (validation){
             const {data}  = await axios.post(`${process.env.NEXT_PUBLIC_PORT}/api/auth/jwt/generate`, foundUser)
             return { token: data.token, userId: foundUser.id }
@@ -28,7 +28,8 @@ class UserApiService{
 
     async signUp(formData: SignUpFormValuesDto) {
         try{
-            const hashedPassword = await bcrypt.hash(formData.password, 10);
+            const hashedPassword = await hash(formData.password, 10);
+            console.log('started hashing: ', hashedPassword)
             const newUser = await prisma.user.create({
                 data: {
                     username: formData.username,
@@ -36,9 +37,12 @@ class UserApiService{
                     password: hashedPassword,
                 }
             });
-            const {data}  = await axios.post(`${process.env.NEXT_PUBLIC_PORT}/api/auth/jwt/generate`, newUser)
+            console.log('created user: ', newUser)
+            const {data} = await axios.post(`${process.env.NEXT_PUBLIC_PORT}/api/auth/jwt/generate`, newUser)
+            console.log('went through jwt generation: ', data)
             return { token: data.token, userId: newUser.id }
         }catch(error){
+            console.log(error)
             throw new Error()
         }
     }

@@ -9,8 +9,8 @@ import Youtube from "react-youtube"
 import { DefaultGenerics, StreamChat } from "stream-chat"
 
 export default function ChannelPage(
-	{user, logout, streamUser, channelId}: 
-	{user: any, logout: any, streamUser:StreamChat<DefaultGenerics>, channelId: string | null}){
+	{user, streamUser, channelId}: 
+	{user: any, streamUser:StreamChat<DefaultGenerics>, channelId: string | null}){
 
 	const [channelList, setChannelList] = useState<any>({})
 	const [channel, setChannel] = useState<any>(null);
@@ -51,7 +51,7 @@ export default function ChannelPage(
 	return(
 		<div>
 			<span>Welcome {user.username}!</span>
-			<button onClick={() => logout()}>Quit</button>
+			
 			<div>
 			   <ChannelScroll channelList={channelList} activateAddChannel={addChannelHandler} />
 			</div>

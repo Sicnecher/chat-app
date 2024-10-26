@@ -8,6 +8,7 @@ export async function POST(req: NextRequest){
         const request = await req.json()
         const payload = jwt.verify(request.token, process.env.SECRET_JWT as string) as jwt.JwtPayload;
         const response = await apiAuthService.validateUser(payload);
+        console.log(response)
         const streamToken = await axios.post(`${process.env.NEXT_PUBLIC_PORT}/api/auth/streamToken`, {userId: payload.id})
         return NextResponse.json({
             userData: response,
@@ -19,6 +20,7 @@ export async function POST(req: NextRequest){
         } else if (error instanceof jwt.TokenExpiredError) {
             throw new Error('JWT token has expired');
         } else {
+            console.log(error)
             throw new Error('Unauthorized Access!')
         }
     }

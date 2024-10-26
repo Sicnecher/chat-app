@@ -1,9 +1,11 @@
 import Form from "./form"
 import styles from '../../global.module.css'
+import { LogOutBtn } from "@/app/page"
 
 export default function  formPage(){
     return (
         <>
+        <LogOutBtn />
         <div className={styles.sideColumn}>
             <h1>Start your 30-day free trial</h1>
             <section>

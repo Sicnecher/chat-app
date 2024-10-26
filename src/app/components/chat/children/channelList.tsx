@@ -24,9 +24,7 @@ export default function ContactScroll({channelList, activateAddChannel}: {channe
 
     async function createChat(){
         axios.post(`${process.env.NEXGT_PUBLIC_API_BASE}/api/user/chats/createChat`, creationData).then((response) => {
-            console.log(response)
         }).catch((error) => {
-            console.log(error) 
         }).finally(() => {
 
         })
