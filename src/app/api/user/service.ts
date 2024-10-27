@@ -1,8 +1,10 @@
 import { SignUpFormValuesDto } from '@/app/models/dto/logform';
 import { UserDto } from '@/app/models/dto/user';
 import {PrismaClient} from "@prisma/client"
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import axios from 'axios';
 import { compare, hash } from 'bcryptjs';
+import { NextResponse } from 'next/server';
 
 const prisma = new PrismaClient()
 
@@ -27,10 +29,10 @@ class UserApiService{
     }
 
     async signUp(formData: SignUpFormValuesDto) {
-        try{
             const hashedPassword = await hash(formData.password, 10);
             console.log('started hashing: ', hashedPassword)
             console.log('form: ', formData)
+            //Creates a new user based on the form data
             const newUser = await prisma.user.create({
                 data: {
                     username: formData.username,
@@ -39,13 +41,10 @@ class UserApiService{
                 }
             });
             console.log('created user: ', newUser)
+            //if the user info passed validation then a jwt token is generated for the client
             const {data} = await axios.post(`${process.env.NEXT_PUBLIC_PORT}/api/auth/jwt/generate`, newUser)
             console.log('went through jwt generation: ', data)
             return { token: data.token, userId: newUser.id }
-        }catch(error){
-            console.log(error)
-            throw new Error()
-        }
     }
 }
 export const userApiService = new UserApiService()

@@ -1,28 +1,50 @@
-import {PrismaClient} from "@prisma/client";
-import { userApiService } from "../service";
-import { SignUpFormValuesDto } from "@/app/models/dto/logform";
-import { streamClient } from "../../auth/stream.init";
-import { NextResponse } from "next/server";
-import axios from "axios";
+import { NextResponse } from 'next/server';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import axios from "axios"
+import { SignUpFormValuesDto } from '@/app/models/dto/logform';
+import { userApiService } from '../service';
+import { streamClient } from '@/app/stream.init';
 
-export async function POST(request: Request){
-    try{
-        const formData: SignUpFormValuesDto = await request.json()
-        const {token, userId} = await userApiService.signUp(formData)
+export async function POST(request: Request) {
+    try {
+        const formData: SignUpFormValuesDto = await request.json();
+        const response = await userApiService.signUp(formData) as any;
+
+        console.log('This is the response:', response);
+
         await streamClient.updateUser({
-            id: `${userId}`,
-            data: {
-                name: formData.username,
-            }
-        })
-        const {data} = await axios.post(`${process.env.NEXT_PUBLIC_PORT}/api/auth/streamToken`, {userId})
+            id: `${response.userId}`,
+            data: { name: formData.username },
+        });
+
+        const axiosResponse = await axios.post(`${process.env.NEXT_PUBLIC_PORT}/api/auth/streamToken`, {
+            userId: response.userId,
+        });
+
         return NextResponse.json({
-            userData: {id: userId, name: formData.username, email: formData.email},
-            accessToken: token,
-            streamToken: data.token
-        })
-     }catch(err){
-        console.log('here: ',err)
-        return err
+            userData: { id: response.userId, name: formData.username, email: formData.email },
+            accessToken: response.token,
+            streamToken: axiosResponse.data.token,
+        });
+    } catch (error) {
+        // Check if the error is due to Prisma unique constraint violation
+        if (error && error instanceof PrismaClientKnownRequestError) {
+            if (error.code === 'P2002' && error.meta?.target === 'user_email_key') {
+                return NextResponse.json(
+                    { error: 'Email is already occupied!' },
+                    { status: 409 }
+                );
+            } else if (error.code === 'P2002' && error.meta?.target === 'user_username_key') {
+                return NextResponse.json(
+                    { error: 'Username is already occupied!' },
+                    { status: 409 }
+                );
+            }
+        }
+        // Handle other unexpected errors
+        return NextResponse.json(
+            { error: 'An unexpected error occurred.' },
+            { status: 500 }
+        );
     }
 }

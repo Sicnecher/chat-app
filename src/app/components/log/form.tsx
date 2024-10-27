@@ -14,6 +14,7 @@ import { streamClient } from '../.././stream.init';
 export default function form() {
   const [isLogForm, setIsLogForm] = useState(false);
   const [windowWidth, setWindowWidth] = useState(false);
+  const [errorMessages, setErrorMessages] = useState<string[]>([]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -25,25 +26,33 @@ export default function form() {
   }, []);
 
   async function submitHandler(values: any) {
+    try {
+        const response = await axios.post(
+            `${process.env.NEXT_PUBLIC_PORT as string}/api/user/${isLogForm ? 'in' : 'up'}`, 
+            values
+        );
 
-    async function logResponse(){
-      const {data} = await axios.post(`${process.env.NEXT_PUBLIC_PORT as string}/api/user/${isLogForm ? 'in' : 'up'}`, values)
-      return data
+        const data = response.data;
+
+        // Proceed if the request is successful
+        await streamClient.connectUser(data.userData, data.streamToken);
+        Cookies.set('access_token', data.accessToken);
+        window.location.href = '/';
+
+    } catch (error: any) {
+        // Check for an Axios error response (e.g., 409 or 500)
+        if (error.response) {
+            const serverErrorMessage = error.response.data?.error || 'An unexpected error occurred.';
+            // Log or display the server error message as needed
+            console.log('Server error:', serverErrorMessage);
+            // Optionally, handle specific errors here, e.g., if the email or username is occupied
+            !errorMessages.includes(serverErrorMessage) && setErrorMessages([...errorMessages, serverErrorMessage])
+        } else {
+            console.log('Unexpected error:', error.message);
+        }
     }
-    
-    try{
-      logResponse().then(async ({accessToken, userData, streamToken}) => {
-        await streamClient.connectUser(userData, streamToken)
-        Cookies.set('access_token', accessToken)
-      }).catch((error) => {
-        throw new Error(error)
-      }).finally(() => {
-        window.location.reload()
-      })
-    }catch(error){
-      return error
-    }
-  }
+}
+
 
   return (
     <div className={styles.pageContainer}>
@@ -148,6 +157,7 @@ export default function form() {
                   <ErrorMessage className={styles.fieldError} name="confirm_password" component="div" />
                 </div>
               </section>
+              {errorMessages[0] && <div style={{width: "100%"}}>{errorMessages.map((message) => (<div style={{color: 'red'}}>{message}</div>))}</div>}
               <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>Sign Up</button>
               <label className={styles.question}>Already have an account?
                 <a className={styles.questionBtn} onClick={() => setIsLogForm(!isLogForm)}> Log In</a>

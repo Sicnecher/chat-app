@@ -7,6 +7,7 @@ import axios from "axios"
 import { streamClient } from "../../stream.init"
 import Youtube from "react-youtube"
 import { DefaultGenerics, StreamChat } from "stream-chat"
+import { LogOutBtn } from "@/app/page"
 
 export default function ChannelPage(
 	{user, streamUser, channelId}: 
@@ -50,6 +51,7 @@ export default function ChannelPage(
 
 	return(
 		<div>
+			<LogOutBtn />
 			<span>Welcome {user.username}!</span>
 			
 			<div>
