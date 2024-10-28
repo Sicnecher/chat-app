@@ -15,8 +15,10 @@ export async function POST(request: Request){
             accessToken: token,
             streamToken: response.data.token
         })
-    }catch(error){
-        console.log('here brother: ',error)
-        return error
+    }catch(error: any){
+        return NextResponse.json(
+            {error: error.message},
+            {status: 409}
+        )
     }
 }

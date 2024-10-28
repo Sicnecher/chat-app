@@ -10,13 +10,6 @@ export async function POST(request: Request) {
         const formData: SignUpFormValuesDto = await request.json();
         const response = await userApiService.signUp(formData) as any;
 
-        console.log('This is the response:', response);
-
-        await streamClient.updateUser({
-            id: `${response.userId}`,
-            data: { name: formData.username },
-        });
-
         const axiosResponse = await axios.post(`${process.env.NEXT_PUBLIC_PORT}/api/auth/streamToken`, {
             userId: response.userId,
         });
@@ -26,7 +19,8 @@ export async function POST(request: Request) {
             accessToken: response.token,
             streamToken: axiosResponse.data.token,
         });
-    } catch (error) {
+    } catch (error: any) {
+        console.log(error.message)
         // Check if the error is due to Prisma unique constraint violation
         if (error && error instanceof PrismaClientKnownRequestError) {
             if (error.code === 'P2002' && error.meta?.target === 'user_email_key') {

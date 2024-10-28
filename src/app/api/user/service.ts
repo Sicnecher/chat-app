@@ -11,6 +11,7 @@ const prisma = new PrismaClient()
 class UserApiService{
     constructor() { }
     async signIn(data: any){
+        console.log('this is the data: ', data)
         const foundUser: UserDto | null = await prisma.user.findFirst({
             where: {
                     OR: [
@@ -19,13 +20,13 @@ class UserApiService{
                 ]
             }
         })
-        if (!foundUser) throw new Error('Unauthorized access!');
+        if (!foundUser) throw new Error('Username or email dont exist!');
         const validation = data.isAppwrite ? true : await compare(data.password, foundUser.password);
         if (validation){
             const {data}  = await axios.post(`${process.env.NEXT_PUBLIC_PORT}/api/auth/jwt/generate`, foundUser)
             return { token: data.token, userId: foundUser.id }
         }
-        throw new Error('Validation Failed');
+        throw new Error('password is incorrect');
     }
 
     async signUp(formData: SignUpFormValuesDto) {

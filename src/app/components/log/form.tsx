@@ -9,12 +9,14 @@ import Cookies from 'js-cookie'
 import { FcGoogle } from 'react-icons/fc';
 import TokenProviderBtn from './token-provider';
 import { streamClient } from '../.././stream.init';
+import { ClipLoader } from 'react-spinners';
 
 
 export default function form() {
   const [isLogForm, setIsLogForm] = useState(false);
   const [windowWidth, setWindowWidth] = useState(false);
-  const [errorMessages, setErrorMessages] = useState<string[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string>();
+  const [isFormLoading, setIsFormLoading] = useState<boolean>();
 
   useEffect(() => {
     const handleResize = () => {
@@ -25,32 +27,54 @@ export default function form() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  async function submitHandler(values: any) {
-    try {
-        const response = await axios.post(
-            `${process.env.NEXT_PUBLIC_PORT as string}/api/user/${isLogForm ? 'in' : 'up'}`, 
-            values
-        );
+//   async function submitHandler(values: any) {
+//     try {
+//         const response = await axios.post(
+//             `${process.env.NEXT_PUBLIC_PORT as string}/api/user/${isLogForm ? 'in' : 'up'}`, 
+//             values
+//         );
 
-        const data = response.data;
+//         const data = response.data;
 
+//         // Proceed if the request is successful
+//         await streamClient.connectUser(data.userData, data.streamToken);
+//         Cookies.set('access_token', data.accessToken);
+//         window.location.href = '/';
+
+//     } catch (error: any) {
+//         // Check for an Axios error response (e.g., 409 or 500)
+//         if (error.response) {
+//           console.log(error.response)
+//             const serverErrorMessage = error.response.data?.error || 'An unexpected error occurred.';
+//             // Log or display the server error message as needed
+//             console.log('Server error:', serverErrorMessage);
+//             // Optionally, handle specific errors here, e.g., if the email or username is occupied
+//             setErrorMessage(serverErrorMessage)
+//         } else {
+//             console.log('Unexpected error:', error.message);
+//         }
+//     }
+// }
+
+async function submitHandler(values: any) {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_PORT as string}/api/user/${isLogForm ? 'in' : 'up'}`, values).then(async ({data}) => {
         // Proceed if the request is successful
         await streamClient.connectUser(data.userData, data.streamToken);
         Cookies.set('access_token', data.accessToken);
         window.location.href = '/';
-
-    } catch (error: any) {
+      }).catch((error) => {
         // Check for an Axios error response (e.g., 409 or 500)
         if (error.response) {
+          console.log(error.response)
             const serverErrorMessage = error.response.data?.error || 'An unexpected error occurred.';
             // Log or display the server error message as needed
             console.log('Server error:', serverErrorMessage);
             // Optionally, handle specific errors here, e.g., if the email or username is occupied
-            !errorMessages.includes(serverErrorMessage) && setErrorMessages([...errorMessages, serverErrorMessage])
+            setErrorMessage(serverErrorMessage)
         } else {
             console.log('Unexpected error:', error.message);
         }
-    }
+      })
 }
 
 
@@ -60,7 +84,6 @@ export default function form() {
         <label>Register with:</label>
         <section className={styles.cloudBtnContainer}>
           <TokenProviderBtn size={windowWidth} provider="google" Icon={FcGoogle} />
-          <TokenProviderBtn size={windowWidth} provider="gitlab" Icon={FaGitlab} />
           <TokenProviderBtn size={windowWidth} provider="github" Icon={FaGithub} />
         </section>
       </div>
@@ -97,7 +120,8 @@ export default function form() {
                   <ErrorMessage className={styles.fieldError} name="password" component="div" />
                 </div>
               </section>
-              <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>Sign In</button>
+              {errorMessage && <div style={{width: "200px", color: "red"}}>{errorMessage}</div>}
+              <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>{isSubmitting ? <ClipLoader color="#3498db" loading={isSubmitting} size={20} /> : "Sign In"}</button>
               <label className={styles.question}>Dont have an account?
                 <a className={styles.questionBtn} onClick={() => setIsLogForm(!isLogForm)}> Sign Up</a>
               </label>
@@ -157,8 +181,8 @@ export default function form() {
                   <ErrorMessage className={styles.fieldError} name="confirm_password" component="div" />
                 </div>
               </section>
-              {errorMessages[0] && <div style={{width: "100%"}}>{errorMessages.map((message) => (<div style={{color: 'red'}}>{message}</div>))}</div>}
-              <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>Sign Up</button>
+              {errorMessage && <div style={{width: "200px", color: "red"}}>{'• '+errorMessage}</div>}
+              <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>{isSubmitting ? <ClipLoader color="#3498db" loading={isSubmitting} size={20} /> : "Sign Up"}</button>
               <label className={styles.question}>Already have an account?
                 <a className={styles.questionBtn} onClick={() => setIsLogForm(!isLogForm)}> Log In</a>
               </label>

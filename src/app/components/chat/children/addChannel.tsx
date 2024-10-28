@@ -2,6 +2,7 @@ import axios from "axios"
 import { ErrorMessage, Field, Form, Formik } from "formik"
 import { useState } from "react"
 import styles from '../../../global.module.css'
+import { streamClient } from "@/app/stream.init"
 
 export default function AddChannel({user, deactivateComponent}: {user: any, deactivateComponent: () => void}){
     const [resultedUsers, setResultedUsers] = useState<any>()
@@ -12,7 +13,7 @@ export default function AddChannel({user, deactivateComponent}: {user: any, deac
         setFieldValue(e.target.value);
         console.log(e.target?.value)
         if(e.target.value.length > 2){
-            axios.post(`${process.env.NEXT_PUBLIC_PORT}/api/user/chats/searchUser`,e.target.value ).then((response) => {
+            axios.post(`${process.env.NEXT_PUBLIC_PORT}/api/user/chats/searchUser`, {usernameOrEmail: e.target.value} ).then((response) => {
                 console.log(response)
             }).catch((error) => {
                 console.log('here: ',error)
@@ -20,13 +21,11 @@ export default function AddChannel({user, deactivateComponent}: {user: any, deac
         }
     }
     async function createChat(){
-        axios.post(`${process.env.NEXGT_PUBLIC_API_BASE}/api/user/chats/createChat`, creationData).then((response) => {
-            console.log(response)
-        }).catch((error) => {
-            console.log('here: ',error) 
-        }).finally(() => {
-
-        })
+        const channel = streamClient.channel('messaging', creationData.title, {
+            name: creationData.title,
+            members: creationData.members
+          });
+          await channel.watch();
     }
     return(
         <div>
