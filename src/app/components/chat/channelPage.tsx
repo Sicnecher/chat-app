@@ -1,7 +1,7 @@
 'use client'
 import ChannelScroll from "./children/channelList"
 import ChannelComponent from "./children/channel"
-import AddChannelComponent from "./children/addChannel"
+import DefaultPageComponent from "./children/default-page/addChannel"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { streamClient } from "../../stream.init"
@@ -15,7 +15,7 @@ export default function ChannelPage(
 
 	const [channelList, setChannelList] = useState<any>({})
 	const [channel, setChannel] = useState<any>(null);
-	const [addChannelState, setAddChannelState] = useState<boolean>(false);
+	const [defaultState, setDefaultState] = useState<boolean>(true);
 	const [isChannelReady, setIsChannelReady] = useState<boolean>(false);
 
 	useEffect(() => {     
@@ -46,8 +46,10 @@ export default function ChannelPage(
 	}, [channelId])
 
 	function addChannelHandler(){
-		setAddChannelState(!addChannelState)
+		setDefaultState(false)
 	}
+
+	console.log(channel)
 
 	return(
 		<div>
@@ -55,10 +57,10 @@ export default function ChannelPage(
 			<span>Welcome {user.username}!</span>
 			
 			<div>
-			   <ChannelScroll channelList={channelList} activateAddChannel={addChannelHandler} />
+			   {/* <ChannelScroll channelList={channelList} activateAddChannel={addChannelHandler} /> */}
 			</div>
-				{addChannelState ? (
-					<AddChannelComponent user={user} deactivateComponent={addChannelHandler}/>
+				{defaultState ? (
+					<DefaultPageComponent user={user} deactivateComponent={addChannelHandler}/>
 				) : (
 					streamClient._user && channel && <ChannelComponent client={streamUser} channel={channel} />
 				)}

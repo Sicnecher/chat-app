@@ -3,6 +3,8 @@ import axios from "axios"
 import { ErrorMessage, Field, Form, Formik } from "formik"
 import { useState } from "react"
 import styles from "../../../global.module.css"
+import { streamClient } from "@/app/stream.init"
+import AddChannel from "./default-page/addChannel"
 
 export default function ContactScroll({channelList, activateAddChannel}: {channelList: any[], activateAddChannel: () => void}){
     const [isSearchingUser, setIsSearchingUser] = useState<boolean>(false)
@@ -23,19 +25,15 @@ export default function ContactScroll({channelList, activateAddChannel}: {channe
     }
 
     async function createChat(){
-        axios.post(`${process.env.NEXGT_PUBLIC_API_BASE}/api/user/chats/createChat`, creationData).then((response) => {
-        }).catch((error) => {
-        }).finally(() => {
-
-        })
+        streamClient.channel('messaging', )
     }
 
     return (
         <div>
             <div onClick={() => setIsSearchingUser(true)}>+</div>
             <div style={isSearchingUser ? {display: 'block'} : {display: 'none'}}>
-                <p onClick={() => setIsSearchingUser(false)}>x</p>
-                <input type="text" placeholder="Choose A title" onChange={(e) => setcreationData({title: e.target.value, members: creationData.members})}/>
+                {/* <p onClick={() => setIsSearchingUser(false)}>x</p>
+                <input type="text" placeholder="Choose A title" onChange={ e => setcreationData({title: e.target.value, members: creationData.members})}/>
                 <Formik
                 initialValues={{userToSearch: ''}}
                 onSubmit={() => {}}>
@@ -51,20 +49,20 @@ export default function ContactScroll({channelList, activateAddChannel}: {channe
                                 onChange={userToSearchHandler}
                                 />
                                 <ErrorMessage name="username" component="div" />
-                            </div>                            
+                            </div>
                         </Form>
                     )}
                 </Formik>
                     {resultedUsers ? (
                         <section>
                             {resultedUsers.forEach(({name, email, id}: {name: string, email: string, id: number}) => (
-                                <div 
+                                <div
                                 onClick={() => {
-                                    creationData.members.includes(id) ? 
-                                    setcreationData({title: creationData.title, members: [...creationData.members, id]}) 
-                                    : 
-                                    setcreationData({title: creationData.title, members: creationData.members.filter(v => v !== id)})                                    
-                                }} 
+                                    creationData.members.includes(id) ?
+                                    setcreationData({title: creationData.title, members: [...creationData.members, id]})
+                                    :
+                                    setcreationData({title: creationData.title, members: creationData.members.filter(v => v !== id)})
+                                }}
                                 className={creationData.members.includes(id) ? styles.chosenUser : styles.unChosenUser}>
                                     <h4>name: {name}</h4>
                                     <h4>email: {email}</h4>
@@ -72,7 +70,8 @@ export default function ContactScroll({channelList, activateAddChannel}: {channe
                             ))}
                             <button onClick={createChat}>Create Chat</button>
                         </section>
-                    ) : (<section><h2>Your results will appear here!</h2></section>)}
+                    ) : (<section><h2>Your results will appear here!</h2></section>)} */}
+                    <AddChannel deactivateComponent={() => {set}}/>
             </div>
         </div>
     )
