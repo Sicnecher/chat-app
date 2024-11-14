@@ -1,5 +1,5 @@
 ## Still in development!
-Hello there dear GithHub community, This app is still in development.🤓\
+Hello there dear GithHub community, This repository is still in development.🤓\
 While the development is in the late stages you can definitely interact with the code,\
 if you're interested in viewing a finished project of mine go to the "tedoo-app" repository.😎
 
