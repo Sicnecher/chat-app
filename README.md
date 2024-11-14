@@ -1,7 +1,7 @@
 ## Still in development!
 Hello there dear GithHub community, This app is still in development.🤓\
 While the development is in the late stages you can definitely interact with the code,\
-if you're interested in viewing a finished project of mine go to the "tedoo-app" repository.😎\
+if you're interested in viewing a finished project of mine go to the "tedoo-app" repository.😎
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
